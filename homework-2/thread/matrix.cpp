@@ -4,8 +4,6 @@
 
 #include "matrix.h"
 
-
-
 std::vector<std::vector<int32_t>> createMatrix(const int32_t n)
 {
     std::vector<std::vector<int32_t>> matrix(n, std::vector<int32_t>(n, 0));

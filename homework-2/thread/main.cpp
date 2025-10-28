@@ -21,8 +21,8 @@ int main()
 
     const auto blocks_end = std::chrono::system_clock::now();
 
-            std::cout
+    std::cout
         << "with multithreading [rows]:   " << (rows_end - rows_start).count() << " ns" << '\n'
-        << "with multithreading [blocks]: " << (blocks_end - blocks_start).count()<< " ns"  << '\n'
-        << "without multithreading :      " << (simple_end - simple_start).count()<< " ns"  << '\n';
+        << "with multithreading [blocks]: " << (blocks_end - blocks_start).count() << " ns" << '\n'
+        << "without multithreading :      " << (simple_end - simple_start).count() << " ns" << '\n';
 }
