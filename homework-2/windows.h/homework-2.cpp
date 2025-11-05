@@ -1,7 +1,5 @@
 #include "matrix.h"
 
-
-
 int main()
 {
     const std::vector<std::vector<int32_t>> A = createMatrix(1000);
