@@ -17,7 +17,7 @@ public:
         std::unique_lock<std::mutex> lock(mutex_);
 
         cv_can_send_.wait(lock, [this] {
-            queue_.size() <= this->size_ || closed_;
+            return queue_.size() < this->size_ || closed_;
         });
 
         if (closed_) {
@@ -31,6 +31,25 @@ public:
 
     std::pair<T, bool> Recv()
     {
+        std::unique_lock<std::mutex> lock(mutex_);
+
+        cv_can_receive_.wait(lock, [this] {
+            return !(queue_.empty()) || closed_;
+        });
+
+        if (!queue_.empty()) {
+            T value = std::move(queue_.front());
+            queue_.pop();
+            cv_can_send_.notify_one();
+            return {std::move(value), true};
+        }
+
+        if (queue_.empty() && closed_) {
+            return {T(), false;}
+        }
+        
+
+
     }
 
     void Close()
