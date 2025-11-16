@@ -16,16 +16,16 @@ public:
     {
         std::unique_lock<std::mutex> lock(mutex_);
 
-        cv_can_send_.wait(lock, [this] {
-            return queue_.size() < this->size_ || closed_;
-        });
+        cv_can_send_.wait(lock, [this]
+                          { return queue_.size() < this->size_ || closed_; });
 
-        if (closed_) {
+        if (closed_)
+        {
             throw std::runtime_error("meow :(");
         }
 
         queue_.push(std::move(value));
-        
+
         cv_can_receive_.notify_one();
     }
 
@@ -33,21 +33,20 @@ public:
     {
         std::unique_lock<std::mutex> lock(mutex_);
 
-        cv_can_receive_.wait(lock, [this] {
-            return !(queue_.empty()) || closed_;
-        });
+        cv_can_receive_.wait(lock, [this]
+                             { return !(queue_.empty()) || closed_; });
 
-        if (!queue_.empty()) {
+        if (!queue_.empty())
+        {
             T value = std::move(queue_.front());
             queue_.pop();
             cv_can_send_.notify_one();
             return {std::move(value), true};
-        } else {
+        }
+        else
+        {
             return {T(), false};
         }
-        
-
-
     }
 
     void Close()
