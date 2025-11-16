@@ -42,10 +42,8 @@ public:
             queue_.pop();
             cv_can_send_.notify_one();
             return {std::move(value), true};
-        }
-
-        if (queue_.empty() && closed_) {
-            return {T(), false;}
+        } else {
+            return {T(), false};
         }
         
 
@@ -54,6 +52,10 @@ public:
 
     void Close()
     {
+        std::unique_lock<std::mutex> lock(mutex_);
+        this->closed_ = true;
+        cv_can_receive_.notify_all();
+        cv_can_send_.notify_all();
     }
 
 private:
