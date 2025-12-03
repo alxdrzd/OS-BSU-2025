@@ -57,7 +57,7 @@ int main() {
         std::cout << "[User]   SUCCESS: Process " << v1 << " is dead." << std::endl;
     } else {
         std::cerr << "[User]   FAILURE: Process " << v1 << " is still alive!" << std::endl;
-        kill(v1, SIGKILL); waitpid(v1, nullptr, 0); // Чистим за собой
+        kill(v1, SIGKILL); waitpid(v1, nullptr, 0); 
     }
 
 
