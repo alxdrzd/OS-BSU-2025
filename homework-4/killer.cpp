@@ -89,19 +89,27 @@ void killByEnvVar()
 
 
 int main(int argc, char* argv[]) {
-    if (argc >= 3) {
-        std::string argType = argv[1];
-        std::string argValue = argv[2];
+    killByEnvVar();
 
-        if (argType == "--id") {
-            pid_t pid = std::stoi(argValue);
-            killById(pid);
-        } else if (argType == "--name") {
-            killByName(argValue);
+    for (int i = 1; i < argc; ++i) {
+        std::string arg = argv[i];
+
+        if (arg == "--id") {
+            if (i + 1 < argc) {
+                pid_t pid = std::stoi(argv[++i]);
+                killById(pid);
+            } else {
+                std::cerr << "[killer] : --id option, however no argument provided" << std::endl;
+            }
+        } else if (arg == "--name") {
+            if (i + 1 < argc) {
+                std::string name = argv[++i];
+                killByName(name);
+            } else {
+                std::cerr << "[killer] : --name option, however no argument provided" << std::endl;
+            }
         }
     }
-
-    killByEnvVar();
 
     return 0;
 }
